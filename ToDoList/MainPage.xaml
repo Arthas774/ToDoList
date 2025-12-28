@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:y="clr-namespace:ToDoList"
+             x:Class="ToDoList.MainPage">
+
+    <Grid RowDefinitions="Auto,*" Padding="20" RowSpacing="20">
+        <!-- Ввод -->
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" HorizontalOptions="Center">
+            <Border StrokeThickness="2" Grid.Column="0">
+                <Entry Placeholder="Введите новую задачу..."
+                       Text="{Binding EntryText}" x:Name="entry"/>
+            </Border>
+            <Button Text="+" FontSize="30"
+                    WidthRequest="60" HeightRequest="60"
+                    Grid.Column="1" x:Name="add_elem"
+                    Command="{Binding AddCommand}"
+                    CommandParameter="{Binding Source={x:Reference entry},Path=Text}"/>
+        </Grid>
+
+        <!-- Список -->
+        <CollectionView Grid.Row="1" ItemsSource="{Binding Items}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <FlexLayout Direction="Row" AlignItems="Center"
+                                Padding="10,15" BackgroundColor="LightGray"
+                                Margin="0,5">
+                        <CheckBox IsChecked="{Binding IsDone}" VerticalOptions="Center"/>
+                        <Label Text="{Binding Name}" FontSize="16"
+                               TextDecorations="{Binding Stroke}"
+                               HorizontalOptions="StartAndExpand" Margin="10,0"/>
+                        <Button Text="🗑" BackgroundColor="Red" TextColor="White"
+                                WidthRequest="50" HeightRequest="50"
+                                VerticalOptions="Center"
+                                Command="{Binding Path=BindingContext.RemoveCommand,
+                                                 Source={x:Reference add_elem}}"
+                                CommandParameter="{Binding .}"/>
+                    </FlexLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>
